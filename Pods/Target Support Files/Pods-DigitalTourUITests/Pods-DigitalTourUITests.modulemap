@@ -1,0 +1,6 @@
+framework module Pods_DigitalTourUITests {
+  umbrella header "Pods-DigitalTourUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
