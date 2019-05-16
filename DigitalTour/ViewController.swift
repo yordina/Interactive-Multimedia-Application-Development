@@ -151,6 +151,7 @@ class ViewController: UIViewController, MKMapViewDelegate,SFSpeechRecognizerDele
         self.tourMapKit.showsBuildings = true
         self.tourMapKit.isZoomEnabled = true
         self.tourMapKit.isScrollEnabled = true
+
         let camera = FlyoverCamera(mapView: self.tourMapKit, configuration:FlyoverCamera.Configuration(duration: 6.0, altitude: 300, pitch: 45.0, headingStep: 20.0))
         camera.start(flyover: self.userInputLocation)
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(9), execute: {camera.stop()})
