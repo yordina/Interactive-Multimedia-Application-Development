@@ -15,7 +15,7 @@ class ViewController: UIViewController, MKMapViewDelegate,SFSpeechRecognizerDele
 
     
     
-    var userInputLocation =  CLLocationCoordinate2D(latitude: 40.7484405, longitude: -73.9856644)
+    var userInputLocation =  CLLocationCoordinate2D(latitude: 15.3370, longitude: 38.9379)
     let speechRec: SFSpeechRecognizer? = SFSpeechRecognizer(locale: Locale.init(identifier : "en-us"))
     var recognitionRequest:SFSpeechAudioBufferRecognitionRequest?
     var recognitionTask: SFSpeechRecognitionTask?
@@ -93,8 +93,8 @@ class ViewController: UIViewController, MKMapViewDelegate,SFSpeechRecognizerDele
                     self.tourLabel.text = bestTrans
                     self.userInputLocation = self.locationDictionary[bestTrans!]!
                 } else{
-                    self.tourLabel.text = "Can't find this place"
-                    self.userInputLocation = CLLocationCoordinate2D(latitude: 15.3229, longitude: 38.9251)
+                    self.tourLabel.text = "Not found.Let's visit the PYRAMIDS"
+                    self.userInputLocation = CLLocationCoordinate2D(latitude: 29.9792, longitude: 31.1342)
                 }
                   self.mapSetup()
                 }
@@ -126,7 +126,7 @@ class ViewController: UIViewController, MKMapViewDelegate,SFSpeechRecognizerDele
   
     
     
-    
+    var camera: MKMapCamera?
 
     @IBOutlet weak var tourMapKit: MKMapView!
     
@@ -139,6 +139,7 @@ class ViewController: UIViewController, MKMapViewDelegate,SFSpeechRecognizerDele
             tourButton.isEnabled = false
             tourButton.setTitle("Record", for: .normal)
         } else {
+    
             startRecording()
             tourButton.setTitle("Stop", for: .normal)
             
@@ -147,14 +148,53 @@ class ViewController: UIViewController, MKMapViewDelegate,SFSpeechRecognizerDele
     
     func mapSetup()
     {
+        let distance: CLLocationDistance = 1200
+        let pitch: CGFloat = 65.0
+        let heading = 20.0
+       
+        
+        //let distance: CLLocationDistance = 650
+        //let pitch: CGFloat = 30
+        // let heading = 90.0
+        
+        self.tourMapKit.mapType = .satelliteFlyover
+        
+        let coordinate =  CLLocationCoordinate2D(latitude: 15.3370 , longitude: 38.9379)
+        
+        camera = MKMapCamera(lookingAtCenter: userInputLocation,
+                             fromDistance: distance,
+                             pitch: pitch,
+                             heading: heading)
+        
+        tourMapKit.camera = camera!
+        
+        UIView.animate(withDuration: 20.0, animations: {
+            self.camera!.heading += 180
+            self.camera!.pitch = 25
+            self.tourMapKit.camera = self.camera!
+        })
+//        let distance: CLLocationDistance = 600
+//        let pitch: CGFloat = 65.0
+//        let heading = 20.0
+        
+        //let distance: CLLocationDistance = 650
+        //let pitch: CGFloat = 30
+        // let heading = 90.0
+        
+        self.tourMapKit.mapType = .satelliteFlyover
+        
+    
+        //tourMapKit.camera = camera2!
         self.tourMapKit.mapType = .satelliteFlyover
         self.tourMapKit.showsBuildings = true
         self.tourMapKit.isZoomEnabled = true
         self.tourMapKit.isScrollEnabled = true
+        
 
-        let camera = FlyoverCamera(mapView: self.tourMapKit, configuration:FlyoverCamera.Configuration(duration: 20.0, altitude: 600, pitch: 45.0, headingStep: 40.0))
-        camera.start(flyover: self.userInputLocation)
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(9), execute: {camera.stop()})
+//        let camera = FlyoverCamera(mapView: self.tourMapKit, configuration:FlyoverCamera.Configuration(duration: 6.0, altitude: 600, pitch: 45.0, headingStep: 40.0))
+//
+//        camera.start(flyover: self.userInputLocation)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(9), execute: {})
     }
 //    let locationDictionary = ["Statue of Liberty": FlyoverAwesomePlace.newYorkStatueOfLiberty,
 //                              "Golden gate bridge" : FlyoverAwesomePlace.sanFranciscoGoldenGateBridge,
@@ -165,25 +205,29 @@ class ViewController: UIViewController, MKMapViewDelegate,SFSpeechRecognizerDele
 //                              "Apple": FlyoverAwesomePlace.appleHeadquarter]
     let locationDictionary = ["New York": CLLocationCoordinate2D(latitude: 40.7484405, longitude: -73.9856644),
                               "Asmara": CLLocationCoordinate2D(latitude: 15.3229, longitude: 38.9251),
-        "Kabul" :    CLLocationCoordinate2D(latitude: 34.28, longitude: 69.11),
-        "Buenos Aires":  CLLocationCoordinate2D(latitude: 36.30, longitude: -60.00),
-        "Brussels" :  CLLocationCoordinate2D(latitude: 50.51, longitude: 04.21),
-        //Brasilia    15.47S    47.55W
-        //Santiago    33.24S    70.40W
-        //Beijing    39.55N    116.20E
-        //Havana    23.08N    82.22W
-        //Copenhagen    55.41N    12.34E
-        //Djibouti    11.08N    42.20E
-        "Addis Ababa" :    CLLocationCoordinate2D(latitude: 09.02, longitude: 38.42)
-        //Paris    48.50N    02.20E
-        //Athens    37.58N    23.46E
-        //Rome    41.54N    12.29E
-        //Mexico    19.20N    99.10W
-        //Berlin    52.30N    13.25E
-        //Madrid    40.25N    03.45W
-        //Washington DC    39.91N    77.02W
-        //Khartoum    15.31N    32.35E
-        //Riyadh    24.41N    46.42E
+                              "Kabul" :    CLLocationCoordinate2D(latitude: 34.5553, longitude: 69.2075),
+                              "Buenos Aires":  CLLocationCoordinate2D(latitude: -34.6037, longitude: -58.3816),
+                              "Brussels" :  CLLocationCoordinate2D(latitude: 50.8514, longitude: 4.3505),
+                              "Brasilia" :    CLLocationCoordinate2D(latitude: -15.8267, longitude: -47.9218),
+                              "Santiago" : CLLocationCoordinate2D(latitude: 33.24, longitude: -70.40),
+                              "Beijing" :   CLLocationCoordinate2D(latitude: 39.9042, longitude: 116.4074),
+                              "Havana" :  CLLocationCoordinate2D(latitude: 23.1136, longitude: -82.3666),
+                              "Copenhagen" :  CLLocationCoordinate2D(latitude: 55.6761, longitude: 12.5683),
+                              "Massawa" :  CLLocationCoordinate2D(latitude: 15.6079, longitude: 39.4554),
+        
+                              "Djibouti" :  CLLocationCoordinate2D(latitude: 11.8251, longitude: 42.5903),
+                              "Addis Ababa" :    CLLocationCoordinate2D(latitude: 8.9806, longitude: 38.7578),
+                              "Paris" :  CLLocationCoordinate2D(latitude: 48.8584, longitude: 2.2945),
+                              "Athens" :  CLLocationCoordinate2D(latitude: 37.9726, longitude: 23.7303),
+
+                         "Rome" : CLLocationCoordinate2D(latitude: 41.8902, longitude: 12.4922),
+                     "Berlin" : CLLocationCoordinate2D(latitude: 52.5163, longitude: 13.3777),
+                    "San Francisco" : CLLocationCoordinate2D(latitude: 37.8199, longitude: -122.4783),
+                    "London" :CLLocationCoordinate2D(latitude: 51.5007, longitude: -0.1246),
+                    "Cairo" :CLLocationCoordinate2D(latitude: 29.9792, longitude: 31.1342),
+                    
+        
+        
     ]
     
 }
